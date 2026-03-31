@@ -41,55 +41,58 @@ class Shortest_Path_Unit:
         self.distance = distance
         self.previous_node = previous_node
 
-def dijkstra(vertex: str, visited: list[str], tracking_structure: dict, graph: dict):
-    neighborhood = graph[vertex]
+def dijkstra(start_vertex: str, graph: dict) -> dict:
+    vertex = start_vertex
+    visited = []
+    tracking_structure = {}
 
-    current_vertex = tracking_structure.get(vertex)
+    while len(visited) < len(graph.keys()):
 
-    if not current_vertex:
-        tracking_structure[vertex] = Shortest_Path_Unit(vertex, 0)
-        current_vertex = tracking_structure[vertex]
+        neighborhood = graph[vertex]
 
-    next_vertex = None
-    
-    for neighbor in neighborhood:
-        neighbor_node = neighbor['node']
-        neighbor_distance = neighbor['weight']
+        current_vertex_metadata = tracking_structure.get(vertex)
 
-        if neighbor_node not in visited:
-            neighbor_metadata = tracking_structure.get(neighbor_node)
+        if not current_vertex_metadata:
+            empty_shortest_path_unit = Shortest_Path_Unit(vertex, 0)
+            tracking_structure[vertex] = empty_shortest_path_unit
+            current_vertex_metadata = empty_shortest_path_unit
 
-            if not neighbor_metadata:
-                tracking_structure[neighbor_node] = Shortest_Path_Unit(neighbor_node, current_vertex.distance + neighbor_distance, vertex)
-            else:
-                if (current_vertex.distance + neighbor_distance) < neighbor_metadata.distance:
-                    tracking_structure[neighbor_node] = Shortest_Path_Unit(neighbor_node, current_vertex.distance + neighbor_distance, vertex)
-            
-            if not next_vertex:
-                next_vertex = tracking_structure.get(neighbor_node)
-            else:
-                if tracking_structure.get(neighbor_node).distance < next_vertex.distance:
-                    next_vertex = tracking_structure.get(neighbor_node)
-    
-    if vertex not in visited:
-        visited.append(vertex)
+        next_vertex_metadata: Shortest_Path_Unit = None
+        
+        for neighbor in neighborhood:
+            neighbor_node = neighbor['node']
+            neighbor_distance = neighbor['weight']
 
-    if len(visited) == len(graph.keys()):
-        return
+            if neighbor_node not in visited:
+                neighbor_metadata = tracking_structure.get(neighbor_node)
 
-    if not next_vertex:
-        if current_vertex.previous_node:
-            dijkstra(current_vertex.previous_node, visited, tracking_structure, graph)
-    else:
-        dijkstra(next_vertex.node, visited, tracking_structure, graph)
+                if not neighbor_metadata:
+                    tracking_structure[neighbor_node] = Shortest_Path_Unit(neighbor_node, current_vertex_metadata.distance + neighbor_distance, vertex)
+                else:
+                    if (current_vertex_metadata.distance + neighbor_distance) < neighbor_metadata.distance:
+                        tracking_structure[neighbor_node] = Shortest_Path_Unit(neighbor_node, current_vertex_metadata.distance + neighbor_distance, vertex)
+                
+                if not next_vertex_metadata:
+                    next_vertex_metadata = tracking_structure.get(neighbor_node)
+                else:
+                    neighbor_node_metadata = tracking_structure.get(neighbor_node)
+                    if neighbor_node_metadata.distance < next_vertex_metadata.distance:
+                        next_vertex_metadata = neighbor_node_metadata
+        
+        if vertex not in visited:
+            visited.append(vertex)
+        
+        if not next_vertex_metadata:
+            if current_vertex_metadata.previous_node:
+                vertex = current_vertex_metadata.previous_node
+        else:
+            vertex = next_vertex_metadata.node
+    return tracking_structure
 
+result = dijkstra("B", graph)
 
-tracking_structure = {}
+result_keys = result.keys()
 
-dijkstra("B", [], tracking_structure, graph)
-
-tracking_structure_keys = tracking_structure.keys()
-
-for key in tracking_structure_keys:
-    shortest_path_unit = tracking_structure[key]
+for key in result_keys:
+    shortest_path_unit = result_keys[key]
     print(f"vertex: {shortest_path_unit.node} | short_distance: {shortest_path_unit.distance} | previous_node: {shortest_path_unit.previous_node}")
