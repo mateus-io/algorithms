@@ -94,5 +94,5 @@ result = dijkstra("B", graph)
 result_keys = result.keys()
 
 for key in result_keys:
-    shortest_path_unit = result_keys[key]
+    shortest_path_unit = result[key]
     print(f"vertex: {shortest_path_unit.node} | short_distance: {shortest_path_unit.distance} | previous_node: {shortest_path_unit.previous_node}")
