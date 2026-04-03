@@ -25,3 +25,9 @@ Studying interesting algorithms
 <img width="320" height="180" alt="Image" src="https://github.com/user-attachments/assets/5e85e5a9-b662-47c5-b0a1-2a9ad882e278" />
 
 [Link to my video explaining the implementation](https://youtu.be/lGJFqRrizYs?si=H-sHHieV91_fzF_o)
+
+### Dijkstra
+
+<img width="320" height="180" alt="Image" src="https://github.com/user-attachments/assets/6bdd32e7-39c1-403b-be57-1ec00a5b4176" />
+
+[Link to my video explaining the implementation](https://youtu.be/t4OFDvii6r4)
